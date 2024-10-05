@@ -200,7 +200,7 @@
     function showPosition(position) {
       var latitude =  position.coords.latitude;
       var longitude = position.coords.longitude;
-  const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=AIzaSyB0ZT7PDB6DfIJpLyajwUopE2KkXv07FK8&result_type=locality`;
+  const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key={key}&result_type=locality`;
 
   fetch(url)
     .then(response => response.json())
