@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html>
+    <head>
+        <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>palit</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="desktop_2.css" />
+    </head>
+    <body>
+        <div class="desktop-2">
+      <div class="head">
+        <div class="header">
+          <div class="hearder-left">
+            <div class="icon">
+            </div>
+            <div class="location-dot-solid-1">
+              <img class="vector-19" src="../assets/vectors/vector_1_x2.svg" />
+            </div>
+              <div class="location" id="location" onclick="getLocation()">
+            Location
+            </div>
+          </div>
+          <input type="text" id="search_input" onmouseout="hideSearchBar()" />
+            <div id="search_grp">
+                <div class="magnifying-glass-solid-1" onclick="showSearchBar()">
+              <img class="vector-18" src="../assets/vectors/vector_11_x2.svg"/>
+            </div>
+            </div>
+          <div class="header-right">
+            <div class="about-grp">
+              <span class="about-1">
+              About
+              </span>
+            </div>
+            <div class="acc-grp">
+              <div class="user-regular-1">
+                <img class="vector-22" src="../assets/vectors/vector_2_x2.svg" />
+              </div>
+              <div class="my-account">
+              My Account
+              </div>
+            </div>
+            <div class="cart-grp">
+              <img class="svgviewer-output-41" src="../assets/vectors/svgviewer_output_41_x2.svg" />
+              <div class="cart">
+              Cart
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+            <div id="grid_container">
+            <div class="restaurant_list_container">
+                <div class="cuisine_title" id="cuisine_title"></div>
+                <div id="restaurant_list"></div>
+        </div>
+            <div id="mapView"></div>
+            </div>
+            <div class="footer">
+        <div class="untitled-111">
+        </div>
+        <div class="group-14">
+          <div class="sitemap">
+          Sitemap
+          </div>
+          <div class="home">
+          Home
+          </div>
+          <div class="about">
+          About
+          </div>
+          <span class="contact-us">
+          Contact Us
+          </span>
+        </div>
+      </div>
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+        <script>
+            
+             function onload(){
+        $("#search_input").val("");
+         var searchListen = document.getElementById("search_input");
+        searchListen.addEventListener("keypress", function (event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                onSearch();
+            }
+        });
+    }
+    onload();
+    
+            function displayTitle(){
+            var data = window.location.search;
+            var params = new URLSearchParams(data);
+             if (params.has('cuisine')) {
+            var cuisine = params.get("cuisine");
+            var cuisineCaps = cuisine[0].toUpperCase() + cuisine.slice(1);
+            var palitStr = localStorage.getItem("palit");
+            var palitObj = JSON.parse(palitStr);
+            var city = palitObj.city; 
+            $("#cuisine_title").html(cuisineCaps + " Spots to Explore in " + city);
+        };
+         if (params.has('search')) {
+            var search = params.get("search");
+            var searchCaps = search[0].toUpperCase() + search.slice(1);
+            var palitStr = localStorage.getItem("palit");
+            var palitObj = JSON.parse(palitStr);
+            var city = palitObj.city; 
+            $("#cuisine_title").html("Looking for " + searchCaps + " Spots in " + city + "!");
+        }
+            }
+    
+            function displayRestaurants(){
+                var data = window.location.search;
+            var params = new URLSearchParams(data);
+                 if (params.has('cuisine')) {
+            var cuisine = params.get("cuisine");
+            var palitStr = localStorage.getItem("palit");
+            var palitObj = JSON.parse(palitStr);
+            var city = palitObj.city; 
+            
+            const apiKey = 'AIzaSyB0ZT7PDB6DfIJpLyajwUopE2KkXv07FK8'; 
+            var query = cuisine + " restaurants in" + city; 
+            var requestBody = { 
+                textQuery: query, 
+                openNow: true, 
+                pageSize: 4
+            }; 
+            fetch('https://places.googleapis.com/v1/places:searchText', { method: 'POST', headers: { 
+                    'Content-Type': 'application/json', 
+                    'X-Goog-Api-Key': apiKey, 
+                    'X-Goog-FieldMask': 'places.displayName,places.formattedAddress,places.id' 
+                }, 
+                body: JSON.stringify(requestBody) }) 
+                    .then(response => response.json()) 
+                    .then(data => {
+                    var placesArr = data.places;
+                    placesArr.forEach(item=>{
+                    var displayName = item.displayName.text;
+                    var address = item.formattedAddress;
+                    var placeID = item.id;
+                    $("#restaurant_list").append(`
+                <div class="restaurant">
+                <div class="restaurant_name" onclick="getMap('${placeID}')">${displayName}</div>
+                <div class="restaurant_address">${address}</div>
+                </div>
+                `);
+                    });
+                 var firstItem = placesArr[0];
+                 var firstItemPlaceId = firstItem.id;
+                 $("#mapView").append(`
+                <iframe id="map_iframe"
+                frameborder="0" style="border:0"
+                referrerpolicy="no-referrer-when-downgrade"
+                src="https://www.google.com/maps/embed/v1/place?key=AIzaSyB0ZT7PDB6DfIJpLyajwUopE2KkXv07FK8&q=place_id:${firstItemPlaceId}"
+                allowfullscreen>
+              </iframe>
+              `);
+                }) 
+                    .catch(error => { console.log('Error:', error); });
+        };
+         if (params.has('search')) {
+            var search = params.get("search");
+            var palitStr = localStorage.getItem("palit");
+            var palitObj = JSON.parse(palitStr);
+            var city = palitObj.city; 
+            
+            const apiKey = 'AIzaSyB0ZT7PDB6DfIJpLyajwUopE2KkXv07FK8'; 
+            var query = search + " restaurants in" + city; 
+            var requestBody = { 
+                textQuery: query, 
+                openNow: true, 
+                pageSize: 4
+            }; 
+            fetch('https://places.googleapis.com/v1/places:searchText', { method: 'POST', headers: { 
+                    'Content-Type': 'application/json', 
+                    'X-Goog-Api-Key': apiKey, 
+                    'X-Goog-FieldMask': 'places.displayName,places.formattedAddress,places.id' 
+                }, 
+                body: JSON.stringify(requestBody) }) 
+                    .then(response => response.json()) 
+                    .then(data => {
+                    var placesArr = data.places;
+                    placesArr.forEach(item=>{
+                    var displayName = item.displayName.text;
+                    var address = item.formattedAddress;
+                    var placeID = item.id;
+                    $("#restaurant_list").append(`
+                <div class="restaurant">
+                <div class="restaurant_name" onclick="getMap('${placeID}')">${displayName}</div>
+                <div class="restaurant_address">${address}</div>
+                </div>
+                `);
+                    });
+                 var firstItem = placesArr[0];
+                 var firstItemPlaceId = firstItem.id;
+                 $("#mapView").append(`
+                <iframe id="map_iframe"
+                frameborder="0" style="border:0"
+                referrerpolicy="no-referrer-when-downgrade"
+                src="https://www.google.com/maps/embed/v1/place?key=AIzaSyB0ZT7PDB6DfIJpLyajwUopE2KkXv07FK8&q=place_id:${firstItemPlaceId}"
+                allowfullscreen>
+              </iframe>
+              `);
+                }) 
+                    .catch(error => { console.log('Error:', error); });
+        }
+        
+        }
+            
+            displayTitle();
+            displayRestaurants();
+            
+            function getMap(placeID){
+                $("#mapView").empty();
+                $("#mapView").append(`
+                <iframe id="map_iframe"
+                frameborder="0" style="border:0"
+                referrerpolicy="no-referrer-when-downgrade"
+                src="https://www.google.com/maps/embed/v1/place?key=AIzaSyB0ZT7PDB6DfIJpLyajwUopE2KkXv07FK8&q=place_id:${placeID}"
+                allowfullscreen>
+              </iframe>
+              `);
+            }
+            
+            function showSearchBar(){
+        $("#search_input").css({
+            "visibility" : "visible"
+        });
+    }
+    function hideSearchBar(){
+        $("#search_input").css({
+            "visibility" : "hidden"
+        });
+    }
+    
+    function onSearch(){
+        var searchTxt = $("#search_input").val();
+        window.location.href = "./cuisine.html?search=" + searchTxt;
+    }
+    
+    function getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+      } else {
+        $("#location").innerHTML = "Nil";
+      }
+    }
+
+    function showPosition(position) {
+      var latitude =  position.coords.latitude;
+      var longitude = position.coords.longitude;
+  const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=AIzaSyB0ZT7PDB6DfIJpLyajwUopE2KkXv07FK8&result_type=locality`;
+
+  fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      if (data.status === "OK" && data.results.length > 0) {
+        const addressComponents = data.results[0].address_components;
+        const city = addressComponents.find(component => component.types.includes("locality"));
+        if (city) {
+          console.log("City:", city.long_name); 
+           $("#location").html(city.long_name);
+           var ObjPalit = {
+               "city":city.long_name,
+               "latitude":latitude,
+               "longitude":longitude
+           };
+           var ObjPalitStr = JSON.stringify(ObjPalit);
+           localStorage.setItem("palit", ObjPalitStr);
+        } else {
+          console.log("City not found in response.");
+        }
+      } else {
+        console.log("Geocoding request failed:", data.status);
+      }
+    })
+    .catch(error => console.error("Error fetching data:", error));
+
+    }
+        </script>
+    </body>
+</html>

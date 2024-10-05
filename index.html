@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>palit</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="desktop_1.css" />
+  </head>
+  <body>
+    <div class="desktop-1">
+      <div class="head">
+        <div class="header">
+          <div class="hearder-left">
+            <div class="icon">
+            </div>
+            <div class="location-dot-solid-1">
+              <img class="vector-19" src="../assets/vectors/vector_1_x2.svg" />
+            </div>
+              <div class="location" id="location" onclick="getLocation()">
+            Location
+            </div>
+          </div>
+            <input type="text" id="search_input" onmouseout="hideSearchBar()" />
+            <div id="search_grp">
+                <div class="magnifying-glass-solid-1" onclick="showSearchBar()">
+              <img class="vector-18" src="../assets/vectors/vector_11_x2.svg"/>
+            </div>
+            </div>
+          <div class="header-right">
+            <div class="about-grp">
+              <span class="about-1">
+              About
+              </span>
+            </div>
+            <div class="acc-grp">
+              <div class="user-regular-1">
+                <img class="vector-22" src="../assets/vectors/vector_2_x2.svg" />
+              </div>
+              <div class="my-account">
+              My Account
+              </div>
+            </div>
+            <div class="cart-grp">
+              <img class="svgviewer-output-41" src="../assets/vectors/svgviewer_output_41_x2.svg" />
+              <div class="cart">
+              Cart
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="container-1">
+          <div class="angle-down-solid-2">
+            <img class="vector-21" src="../assets/vectors/vector_10_x2.svg" />
+          </div>
+          <div class="pizza-offer">
+          </div>
+          <div class="angle-down-solid-1">
+            <img class="vector-20" src="../assets/vectors/vector_7_x2.svg" />
+          </div>
+        </div>
+      </div>
+      <div class="cuisine-options">
+        <div class="what-do-you-crave">
+        What do you crave?
+        </div>
+          <div class="container">
+          <div class="group-6" onclick="cuisineRedirect('pizza')">
+            <div class="pizza-1">
+            </div>
+            <span class="pizza">
+            Pizza
+            </span>
+          </div>
+          <div class="group-7" onclick="cuisineRedirect('chinese')">
+            <div class="chinese-1">
+            </div>
+            <span class="chinese">
+            Chinese
+            </span>
+          </div>
+          <div class="group-8" onclick="cuisineRedirect('italian')">
+            <div class="pasta-in-tomato-sauce-with-chicken-and-tomatoes-on-transparent-background-png-background-removed-1">
+            </div>
+            <span class="italian">
+            Italian
+            </span>
+          </div>
+          <div class="group-9" onclick="cuisineRedirect('burger')">
+            <div class="burger-free-pictures-1153859353087-aydafeq-9-background-removed-1">
+            </div>
+            <span class="burger">
+            Burger
+            </span>
+          </div>
+          <div class="group-10" onclick="cuisineRedirect('dessert')">
+            <div class="desert-1">
+            </div>
+            <span class="desert">
+            Dessert
+            </span>
+          </div>
+          <div class="group-11" onclick="cuisineRedirect('drinks')">
+            <div class="drink-1">
+            </div>
+            <span class="drinks">
+            Drinks
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="restautant-list">
+        <div class="popular-restaurants">
+        Popular restaurants
+        </div>
+        <div class="group-23">
+          <div class="container-2">
+            <div class="group-20">
+              <div class="rectangle-15">
+              </div>
+              <div class="kfc">
+              KFC
+              </div>
+              <img class="group-18" src="../assets/vectors/group_18_x2.svg" />
+            </div>
+            <div class="container-3">
+              <div class="image-1">
+              </div>
+              <div class="subway">
+              Subway
+              </div>
+              <img class="group-17" src="../assets/vectors/group_17_x2.svg" />
+            </div>
+          </div>
+          <div class="container-5">
+            <div class="group-21">
+              <div class="image-2">
+              </div>
+              <div class="pizza-hut">
+              Pizza Hut
+              </div>
+              <img class="group-19" src="../assets/vectors/group_19_x2.svg" />
+            </div>
+            <div class="group-22">
+              <div class="image-3">
+              </div>
+              <div class="taco-bell">
+              Taco Bell
+              </div>
+              <img class="group-17" src="../assets/vectors/group_17_x2.svg" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="footer">
+        <div class="untitled-111">
+        </div>
+        <div class="group-14">
+          <div class="sitemap">
+          Sitemap
+          </div>
+          <div class="home">
+          Home
+          </div>
+          <div class="about">
+          About
+          </div>
+          <span class="contact-us">
+          <a href="./contact.html">
+          Contact Us
+          </a>
+          </span>
+        </div>
+      </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script>
+    
+    function onload(){
+        $("#search_input").val("");
+         var searchListen = document.getElementById("search_input");
+        searchListen.addEventListener("keypress", function (event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                onSearch();
+            }
+        });
+    }
+    onload();
+    function getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+      } else {
+        $("#location").innerHTML = "Nil";
+      }
+    }
+
+    function showPosition(position) {
+      var latitude =  position.coords.latitude;
+      var longitude = position.coords.longitude;
+  const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=AIzaSyB0ZT7PDB6DfIJpLyajwUopE2KkXv07FK8&result_type=locality`;
+
+  fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      if (data.status === "OK" && data.results.length > 0) {
+        const addressComponents = data.results[0].address_components;
+        const city = addressComponents.find(component => component.types.includes("locality"));
+        if (city) {
+          console.log("City:", city.long_name); 
+           $("#location").html(city.long_name);
+           var ObjPalit = {
+               "city":city.long_name,
+               "latitude":latitude,
+               "longitude":longitude
+           };
+           var ObjPalitStr = JSON.stringify(ObjPalit);
+           localStorage.setItem("palit", ObjPalitStr);
+        } else {
+          console.log("City not found in response.");
+        }
+      } else {
+        console.log("Geocoding request failed:", data.status);
+      }
+    })
+    .catch(error => console.error("Error fetching data:", error));
+
+    }
+    
+    function cuisineRedirect(cuisine){
+       window.location.href = "./cuisine.html?cuisine=" + cuisine;
+    }
+    function showSearchBar(){
+        $("#search_input").css({
+            "visibility" : "visible"
+        });
+    }
+    function hideSearchBar(){
+        $("#search_input").css({
+            "visibility" : "hidden"
+        });
+    }
+    
+    function onSearch(){
+        var searchTxt = $("#search_input").val();
+        window.location.href = "./cuisine.html?search=" + searchTxt;
+    }
+    </script>
+  </body>
+</html>
