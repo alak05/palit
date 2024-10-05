@@ -128,7 +128,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
             var palitObj = JSON.parse(palitStr);
             var city = palitObj.city; 
             
-            const apiKey = 'AIzaSyB0ZT7PDB6DfIJpLyajwUopE2KkXv07FK8'; 
+            const apiKey = {key}; 
             var query = cuisine + " restaurants in" + city; 
             var requestBody = { 
                 textQuery: query, 
@@ -161,7 +161,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 <iframe id="map_iframe"
                 frameborder="0" style="border:0"
                 referrerpolicy="no-referrer-when-downgrade"
-                src="https://www.google.com/maps/embed/v1/place?key=AIzaSyB0ZT7PDB6DfIJpLyajwUopE2KkXv07FK8&q=place_id:${firstItemPlaceId}"
+                src="https://www.google.com/maps/embed/v1/place?key={key}&q=place_id:${firstItemPlaceId}"
                 allowfullscreen>
               </iframe>
               `);
@@ -174,7 +174,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
             var palitObj = JSON.parse(palitStr);
             var city = palitObj.city; 
             
-            const apiKey = 'AIzaSyB0ZT7PDB6DfIJpLyajwUopE2KkXv07FK8'; 
+            const apiKey = {key}; 
             var query = search + " restaurants in" + city; 
             var requestBody = { 
                 textQuery: query, 
@@ -207,7 +207,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 <iframe id="map_iframe"
                 frameborder="0" style="border:0"
                 referrerpolicy="no-referrer-when-downgrade"
-                src="https://www.google.com/maps/embed/v1/place?key=AIzaSyB0ZT7PDB6DfIJpLyajwUopE2KkXv07FK8&q=place_id:${firstItemPlaceId}"
+                src="https://www.google.com/maps/embed/v1/place?key={key}&q=place_id:${firstItemPlaceId}"
                 allowfullscreen>
               </iframe>
               `);
@@ -226,7 +226,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 <iframe id="map_iframe"
                 frameborder="0" style="border:0"
                 referrerpolicy="no-referrer-when-downgrade"
-                src="https://www.google.com/maps/embed/v1/place?key=AIzaSyB0ZT7PDB6DfIJpLyajwUopE2KkXv07FK8&q=place_id:${placeID}"
+                src="https://www.google.com/maps/embed/v1/place?key={key}&q=place_id:${placeID}"
                 allowfullscreen>
               </iframe>
               `);
@@ -259,7 +259,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
     function showPosition(position) {
       var latitude =  position.coords.latitude;
       var longitude = position.coords.longitude;
-  const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=AIzaSyB0ZT7PDB6DfIJpLyajwUopE2KkXv07FK8&result_type=locality`;
+  const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key={key}&result_type=locality`;
 
   fetch(url)
     .then(response => response.json())
